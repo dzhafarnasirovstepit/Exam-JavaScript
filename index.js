@@ -92,8 +92,8 @@ class TasksController {
         this.getFilteredTasks = function(inMainTeam) {
             const filteredFootballPlayers = [];
     
-            for(const footballPlayer of _footballPlayers) {
-                if (footballPlayer === inMainTeam) {
+            for(const taskList of taskList) {
+                if (taskList === inMainTeam) {
                     filteredFootballPlayers.push(footballPlayer);
                 }
             }
