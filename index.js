@@ -1,12 +1,13 @@
 console.clear();
 
 class Task {
+
     #id;
     #description;
     #cost;
 
     constructor (id, description, cost) {
-        this.#id = id
+        this.#id = id + Math.random().toString(16).slice(2);
         this.#description = description;
         this.#cost = cost;
     }
@@ -29,12 +30,12 @@ function IncomeTask(id, description, cost) {
 
     const _task = new Task (id, description, cost);
 
-    this.makeDone = {
-
+    this.makeDone = function (budget) {
+        income += cost;
     }
 
-    this.makeUnDone = {
-
+    this.makeUnDone = function (budget) {
+        income -= cost;
     }
 
 }
@@ -43,13 +44,14 @@ function ExpenseTask(id, description, cost) {
 
     const _task = new Task (id, description, cost);
 
-    this.makeDone = {
-
+    this.makeDone = function (budget) {
+        expenses += cost;
     }
 
-    this.makeUnDone = {
-
+    this.makeUnDone = function (budget) {
+        expenses -= cost;
     }
+
 
 
 }
@@ -102,6 +104,8 @@ class TasksController {
     
     taskList = [];
     
+}
+
 }
 
 class BudgetController {
