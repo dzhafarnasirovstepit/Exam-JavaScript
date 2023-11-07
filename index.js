@@ -29,37 +29,54 @@ function Task(id, description, cost) {
     })
 }
 
-function IncomeTask(id, description, cost) {
+class IncomeTask {
 
-    const _task = new Task(id, description, cost);
+    #task;
 
-    this.makeDone = function (budget) {
-        income += cost;
+    constructor (description, cost) {
+        this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
     }
 
-    this.makeUnDone = function (budget) {
-        income -= cost;
+    makeDone (budget) {
+        if (budget && budget.income !== undefined) {
+            budget.income += this.#task.cost;
+        }
+    }
+
+    makeUnDone (budget) {
+        if (budget && budget.income !== undefined) {
+            budget.income -= this.#task.cost;
+        }
+    }
+    
+}
+
+class ExpenseTask {
+
+    #task;
+
+
+    constructor (description, cost) {
+    
+        this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
+    }
+
+    makeDone (budget) {
+        if (budget && budget.expenses !== undefined) {
+            budget.expenses += this.#task.cost;
+        }
+    }
+
+    makeUnDone (budget) {
+        if (budget && budget.expenses !== undefined) {
+            budget.expenses -= this.#task.cost;
+        }
     }
 
 }
 
-function ExpenseTask(id, description, cost) {
 
-    const _task = new Task(id, description, cost);
-
-    this.makeDone = function (budget) {
-        expenses += cost;
-    }
-
-    this.makeUnDone = function (budget) {
-        expenses -= cost;
-    }
-
-
-
-}
-
-class TasksController {
+/* class TasksController {
 
     #tasks;
 
@@ -113,4 +130,18 @@ class TasksController {
 
 class BudgetController {
 
-}
+} */
+
+
+const myIncomeTask = new IncomeTask ('salary', 2000);
+
+const myBudget = {
+    income: 500,
+    expenses: 200,
+  };
+
+  console.log('Current budget is', myBudget);
+
+  myIncomeTask.makeDone(myBudget);
+
+  console.log('Budget after task is', myBudget);
