@@ -133,15 +133,18 @@ class BudgetController {
 } */
 
 
-const myIncomeTask = new IncomeTask ('salary', 2000);
+const myIncomeTask = new IncomeTask ('salary', 200);
+
+const myExpensesTask = new ExpenseTask('purchases', 100);
 
 const myBudget = {
     income: 500,
     expenses: 200,
-  };
+};
 
-  console.log('Current budget is', myBudget);
+console.log('Current budget is', myBudget);
 
-  myIncomeTask.makeDone(myBudget);
+myIncomeTask.makeUnDone(myBudget);
+myExpensesTask.makeDone(myBudget);
 
-  console.log('Budget after task is', myBudget);
+console.log('Budget after tasks is', myBudget);
