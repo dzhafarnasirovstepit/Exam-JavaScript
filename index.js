@@ -33,22 +33,22 @@ class IncomeTask {
 
     #task;
 
-    constructor (description, cost) {
+    constructor(description, cost) {
         this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
     }
 
-    makeDone (budget) {
+    makeDone(budget) {
         if (budget && budget.income !== undefined) {
             budget.income += this.#task.cost;
         }
     }
 
-    makeUnDone (budget) {
+    makeUnDone(budget) {
         if (budget && budget.income !== undefined) {
             budget.income -= this.#task.cost;
         }
     }
-    
+
 }
 
 class ExpenseTask {
@@ -56,18 +56,18 @@ class ExpenseTask {
     #task;
 
 
-    constructor (description, cost) {
-    
+    constructor(description, cost) {
+
         this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
     }
 
-    makeDone (budget) {
+    makeDone(budget) {
         if (budget && budget.expenses !== undefined) {
             budget.expenses += this.#task.cost;
         }
     }
 
-    makeUnDone (budget) {
+    makeUnDone(budget) {
         if (budget && budget.expenses !== undefined) {
             budget.expenses -= this.#task.cost;
         }
@@ -126,14 +126,46 @@ class ExpenseTask {
 
     }
 
-}
-
-class BudgetController {
-
 } */
 
 
-const myIncomeTask = new IncomeTask ('salary', 200);
+class TasksController {
+
+    #tasks;
+
+    constructor() {
+        this.#tasks = [];
+    }
+
+    addTasks(...newTasks) {
+
+        for (const task of newTasks) {
+            if (!this.#tasks.some(existingTask => existingTask.id === task.id)) {
+                this.#tasks.push(task);
+            }
+        }
+    }
+
+    deleteTask(taskToDelete) {
+        const taskIndex = this.#tasks.findIndex(task => task.id === taskToDelete.id);
+
+
+        if (taskIndex !== -1) {
+            this.#tasks.splice(taskIndex, 1);
+        }
+
+    }
+
+    getTasks() {
+        return this.#tasks;
+    }
+
+}
+
+
+
+
+const myIncomeTask = new IncomeTask('salary', 200);
 
 const myExpensesTask = new ExpenseTask('purchases', 100);
 
