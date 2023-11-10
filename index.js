@@ -1,8 +1,8 @@
 console.clear();
 
-function Task(id, description, cost) {
+function Task(description, cost) {
 
-    const _id = id;
+    const _id = "id" + Math.random().toString(16).slice(2);
     const _description = description;
     const _cost = cost;
 
@@ -28,6 +28,7 @@ function Task(id, description, cost) {
 
     })
 }
+
 
 class IncomeTask {
 
@@ -76,59 +77,6 @@ class ExpenseTask {
 }
 
 
-/* class TasksController {
-
-    #tasks;
-
-    constructor(tasks) {
-
-        this.#tasks = taskList;
-
-        Object.defineProperty(this, 'taskList', {
-            get() {
-                return taskList;
-            }
-        })
-
-        this.addTasks = function (...taskList) {
-            taskList.push(...taskList);
-        }
-
-        this.delete = function (taskList) {
-            const indexOfTaskList = taskList.indexOf(taskList);
-
-            if (indexOfTaskList !== -1) {
-                taskList.splice(indexOfTaskList, 1);
-            }
-        }
-
-        this.getTasksSortedBy = function () {
-            return taskList.sort(function (a, b) {
-                if (a > b) return 1;
-                if (a < b) return -1;
-
-                return 0;
-            });
-        }
-
-        this.getFilteredTasks = function (inMainTeam) {
-            const filteredFootballPlayers = [];
-
-            for (const taskList of taskList) {
-                if (taskList === inMainTeam) {
-                    filteredFootballPlayers.push(footballPlayer);
-                }
-            }
-        }
-
-
-        taskList = [];
-
-    }
-
-} */
-
-
 class TasksController {
 
     #tasks;
@@ -158,6 +106,57 @@ class TasksController {
 
     getTasks() {
         return this.#tasks;
+    }
+
+    getTasksSortedBy(sortBy) {
+        const tasksCopy = [...this.#tasks];
+
+        switch(sortBy) {
+            case 'description':
+                return tasksCopy.sort((a, b) => a.description.localeCompare(b.description));
+            case 'status':
+                return tasksCopy.sort((a, b) => a.status - b.status);
+            case 'cost':
+                return tasksCopy.sort((a, b) => b.cost - a.cost);
+            default:
+                console.error('Incorrect data for sorting tasks');
+                return tasksCopy;
+        }
+    }
+
+    getFilteredTasks(filters) {
+
+        return this.#tasks.filter(task => {
+            if (filters.description && !task.description.includes(filters.description)) {
+                return false;
+            }
+
+            if (filters.hasOwnProperty('isIncome') && typeof filters.isIncome === 'boolean') {
+                
+                if (filters.isIncome && !(task instanceof IncomeTask)) {
+                    return false;
+                }
+
+                if (!filters.isIncome && !(task instanceof ExpenseTask)) {
+                    return false;
+                }
+            }
+
+            if (filters.hasOwnProperty('isCompleted') && typeof filters.isCompleted === 'boolean') {
+                
+                if (filters.isCompleted && !task.isCompleted) {
+                    return false;
+                }
+
+                if (!filters.isCompleted && task.isCompleted) {
+                    return false;
+                }
+            }
+
+            return true;
+        
+        });
+
     }
 
 }
