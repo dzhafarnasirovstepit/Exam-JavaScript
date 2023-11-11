@@ -30,47 +30,41 @@ function Task(description, cost) {
 }
 
 
-class IncomeTask {
-
-    #task;
+class IncomeTask extends Task {
 
     constructor(description, cost) {
-        this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
+        super(description, cost);
     }
 
     makeDone(budget) {
         if (budget && budget.income !== undefined) {
-            budget.income += this.#task.cost;
+            budget.income += this.cost;
         }
     }
 
     makeUnDone(budget) {
         if (budget && budget.income !== undefined) {
-            budget.income -= this.#task.cost;
+            budget.income -= this.cost;
         }
     }
 
 }
 
-class ExpenseTask {
-
-    #task;
-
+class ExpenseTask extends Task {
 
     constructor(description, cost) {
-
-        this.#task = new Task("id" + Math.random().toString(16).slice(2), description, cost);
+        super(description, cost);
     }
 
     makeDone(budget) {
         if (budget && budget.expenses !== undefined) {
-            budget.expenses += this.#task.cost;
+            budget.expenses += this.cost;
         }
     }
 
     makeUnDone(budget) {
         if (budget && budget.expenses !== undefined) {
-            budget.expenses -= this.#task.cost;
+            budget.expenses -= this.cost;
         }
     }
 
@@ -111,7 +105,7 @@ class TasksController {
     getTasksSortedBy(sortBy) {
         const tasksCopy = [...this.#tasks];
 
-        switch(sortBy) {
+        switch (sortBy) {
             case 'description':
                 return tasksCopy.sort((a, b) => a.description.localeCompare(b.description));
             case 'status':
@@ -132,7 +126,7 @@ class TasksController {
             }
 
             if (filters.hasOwnProperty('isIncome') && typeof filters.isIncome === 'boolean') {
-                
+
                 if (filters.isIncome && !(task instanceof IncomeTask)) {
                     return false;
                 }
@@ -143,7 +137,7 @@ class TasksController {
             }
 
             if (filters.hasOwnProperty('isCompleted') && typeof filters.isCompleted === 'boolean') {
-                
+
                 if (filters.isCompleted && !task.isCompleted) {
                     return false;
                 }
@@ -154,10 +148,44 @@ class TasksController {
             }
 
             return true;
-        
+
         });
 
     }
+
+    showTaskAsDone(taskShownDone) {
+        const task = this.#tasks.find(task => task.id === taskShownDone.id);
+        if (task) {
+            task.isCompleted = true;
+        }
+    }
+
+    showTaskAsUndone(taskShowUndone) {
+        const task = this.#tasks.find(task => task.id === taskShowUndone.id);
+        if (task) {
+            task.isCompleted = false;
+        }
+    }
+
+}
+
+class BudgetController {
+
+    #tasksController;
+    #budget;
+
+    constructor (initialBalance) {
+        this.#tasksController = new TasksController();
+
+        this.#budget = {
+            balance: initialBalance !== undefined ? initialBalance : 0,
+            income: 0,
+            expenses: 0
+        };
+    }
+
+
+
 
 }
 
