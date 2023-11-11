@@ -153,15 +153,15 @@ class TasksController {
 
     }
 
-    showTaskAsDone(taskShownDone) {
-        const task = this.#tasks.find(task => task.id === taskShownDone.id);
+    markTaskAsDone(doneTask) {
+        const task = this.#tasks.find(task => task.id === doneTask.id);
         if (task) {
             task.isCompleted = true;
         }
     }
 
-    showTaskAsUndone(taskShowUndone) {
-        const task = this.#tasks.find(task => task.id === taskShowUndone.id);
+    markTaskAsUnDone(unDoneTask) {
+        const task = this.#tasks.find(task => task.id === unDoneTask.id);
         if (task) {
             task.isCompleted = false;
         }
@@ -174,18 +174,90 @@ class BudgetController {
     #tasksController;
     #budget;
 
-    constructor (initialBalance) {
+    constructor (initialBalance = 0) {
         this.#tasksController = new TasksController();
 
         this.#budget = {
-            balance: initialBalance !== undefined ? initialBalance : 0,
+            balance: initialBalance,
             income: 0,
             expenses: 0
         };
     }
 
+    get balance() {
+        return this.#budget.balance;
+    }
 
+    get income() {
+        return this.#budget.income;
+    }
 
+    get expenses() {
+        return this.#budget.expenses;
+    }
+
+    calculateBalance() {
+        return this.#budget.balance + this.#budget.income - this.#budget.expenses;
+    }
+
+    getTasks() {
+        return this.#tasksController.getTasks();
+    }
+
+    addTasks (...newTasks) {
+        this.#tasksController.addTasks(...newTasks);
+    }
+
+    deleteTask(taskToDelete) {
+
+        const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToDelete.id);
+
+        if(!taskExists) {
+            console.log("Task ${task.id} isn't recognized");
+            return;
+        }
+
+        if(taskToDelete.isCompleted) {
+            taskToDelete.makeUnDone();
+        }
+
+        this.#tasksController.deleteTask(taskToDelete);
+
+    }
+
+    doneTask(taskToMarkDone) {
+
+        const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToMarkDone.id);
+
+        if(!taskExists) {
+            console.log("Task ${task.id} isn't recognized");
+        }
+
+        if(taskToMarkDone.isCompleted) {
+            console.log("Task is already done");
+            return;
+        }
+
+        taskToMarkDone.makeDone();
+
+    }
+
+    unDoneTask(taskToMarkUnDone) {
+
+        const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToMarkUnDone.id);
+
+        if(!taskExists) {
+            console.log("Task ${task.id} isn't recognized");
+        }
+
+        if(!taskToMarkUnDone.isCompleted) {
+            console.log("Task isn't done before");
+            return;
+        }
+
+        taskToMarkUnDone.makeUnDone();
+
+    }
 
 }
 
