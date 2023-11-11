@@ -6,6 +6,8 @@ function Task(description, cost) {
     const _description = description;
     const _cost = cost;
 
+    let _isCompleted = false;
+
     Object.defineProperties(this, {
 
         id: {
@@ -24,6 +26,20 @@ function Task(description, cost) {
             get() {
                 return _cost;
             }
+        },
+
+        // new property
+
+        isCompleted: {
+
+            get() {
+                return _isCompleted;
+            },
+
+            set(value) {
+                _isCompleted = value;
+            }
+
         }
 
     })
@@ -174,7 +190,7 @@ class BudgetController {
     #tasksController;
     #budget;
 
-    constructor (initialBalance = 0) {
+    constructor(initialBalance = 0) {
         this.#tasksController = new TasksController();
 
         this.#budget = {
@@ -204,7 +220,7 @@ class BudgetController {
         return this.#tasksController.getTasks();
     }
 
-    addTasks (...newTasks) {
+    addTasks(...newTasks) {
         this.#tasksController.addTasks(...newTasks);
     }
 
@@ -212,12 +228,12 @@ class BudgetController {
 
         const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToDelete.id);
 
-        if(!taskExists) {
-            console.log("Task ${task.id} isn't recognized");
+        if (!taskExists) {
+            console.log(`Task ${task.id} isn't recognized`);
             return;
         }
 
-        if(taskToDelete.isCompleted) {
+        if (taskToDelete.isCompleted) {
             taskToDelete.makeUnDone();
         }
 
@@ -229,11 +245,11 @@ class BudgetController {
 
         const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToMarkDone.id);
 
-        if(!taskExists) {
-            console.log("Task ${task.id} isn't recognized");
+        if (!taskExists) {
+            console.log(`Task ${task.id} isn't recognized`);
         }
 
-        if(taskToMarkDone.isCompleted) {
+        if (taskToMarkDone.isCompleted) {
             console.log("Task is already done");
             return;
         }
@@ -246,11 +262,11 @@ class BudgetController {
 
         const taskExists = this.#tasksController.getTasks().some(task => task.id === taskToMarkUnDone.id);
 
-        if(!taskExists) {
-            console.log("Task ${task.id} isn't recognized");
+        if (!taskExists) {
+            console.log(`Task ${task.id} isn't recognized`);
         }
 
-        if(!taskToMarkUnDone.isCompleted) {
+        if (!taskToMarkUnDone.isCompleted) {
             console.log("Task isn't done before");
             return;
         }
@@ -260,9 +276,6 @@ class BudgetController {
     }
 
 }
-
-
-
 
 const myIncomeTask = new IncomeTask('salary', 200);
 
@@ -279,3 +292,21 @@ myIncomeTask.makeUnDone(myBudget);
 myExpensesTask.makeDone(myBudget);
 
 console.log('Budget after tasks is', myBudget);
+
+
+
+console.log('______________________')
+
+
+
+const budgetController = new BudgetController();
+
+const task = new IncomeTask("Example Task", 50);
+
+budgetController.addTasks(task);
+
+console.log("Task isCompleted before:", task.isCompleted);
+
+budgetController.doneTask(task);
+
+console.log("Task isCompleted after:", task.isCompleted);
