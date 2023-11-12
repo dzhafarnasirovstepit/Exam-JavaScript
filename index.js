@@ -277,7 +277,7 @@ class BudgetController {
 
 }
 
-const myIncomeTask = new IncomeTask('salary', 200);
+/* const myIncomeTask = new IncomeTask('salary', 200);
 
 const myExpensesTask = new ExpenseTask('purchases', 100);
 
@@ -295,18 +295,4 @@ console.log('Budget after tasks is', myBudget);
 
 
 
-console.log('______________________')
-
-
-
-const budgetController = new BudgetController();
-
-const task = new IncomeTask("Example Task", 50);
-
-budgetController.addTasks(task);
-
-console.log("Task isCompleted before:", task.isCompleted);
-
-budgetController.doneTask(task);
-
-console.log("Task isCompleted after:", task.isCompleted);
+console.log('______________________') */
